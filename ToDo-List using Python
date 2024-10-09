@@ -1,0 +1,51 @@
+import tkinter as tk
+from tkinter import messagebox
+root = tk.Tk()
+root.title("To-Do List")
+tasks = []
+task_listbox = tk.Listbox(root, height=10, width=40)
+task_listbox.pack(pady=10)
+def add_task():
+    task = task_entry.get()
+    if task != "":
+        tasks.append(task)
+        update_task_listbox()
+        task_entry.delete(0, tk.END)
+    else:
+        messagebox.showwarning("Input Error", "Please enter a task.")
+def update_task_listbox():
+    task_listbox.delete(0, tk.END)
+    for task in tasks:
+        task_listbox.insert(tk.END, task)
+def delete_task():
+    try:
+        selected_task_index = task_listbox.curselection()[0]
+        del tasks[selected_task_index]
+        update_task_listbox()
+    except IndexError:
+        messagebox.showwarning("Selection Error", "Please select a task to delete.")
+def update_task():
+    try:
+        selected_task_index = task_listbox.curselection()[0]
+        updated_task = task_entry.get()
+        if updated_task != "":
+            tasks[selected_task_index] = updated_task
+            update_task_listbox()
+            task_entry.delete(0, tk.END)
+        else:
+            messagebox.showwarning("Input Error", "Please enter a new task.")
+    except IndexError:
+        messagebox.showwarning("Selection Error", "Please select a task to update.")
+
+task_entry = tk.Entry(root, width=40)
+task_entry.pack(pady=5)
+
+add_task_button = tk.Button(root, text="Add Task", width=20, bg="green", fg="white",font=("Arial", 10, "bold italic"),borderwidth=5, relief="raised",command=add_task)
+add_task_button.pack(pady=5)
+
+update_task_button = tk.Button(root, text="Update Task", width=20,bg="blue", fg="white",font=("Arial", 10, "bold italic"),borderwidth=5, relief="raised", command=update_task)
+update_task_button.pack(pady=5)
+
+delete_task_button = tk.Button(root, text="Delete Task", width=20,bg="red", fg="white",font=("Arial", 10, "bold italic"),borderwidth=5, relief="raised", command=delete_task)
+delete_task_button.pack(pady=5)
+root.mainloop()
